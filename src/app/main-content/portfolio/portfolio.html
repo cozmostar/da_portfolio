@@ -1,0 +1,38 @@
+<section id="portfolio">
+  <div class="header" #contentContainer>
+    <div class="line"></div>
+    <h1>{{ "header.portfolio" | translate }}</h1>
+    <app-section-divider
+      align="right"
+      color="#9747FF"
+      [containerEl]="contentContainerRef.nativeElement"
+    ></app-section-divider>
+    <div class="line"></div>
+  </div>
+  <div>
+    <p>
+      {{ "portfolio.intro" | translate }}
+    </p>
+  </div>
+  <div class="projects-container">
+    <app-project
+      project="pokedex"
+      [align]="'right'"
+      [skills]="['JavaScript', 'HTML', 'CSS', 'Api']"
+    ></app-project>
+    <app-project
+      project="join"
+      [skills]="['Angular', 'TypeScript', 'HTML', 'CSS', 'Supabase']"
+    ></app-project>
+    <app-project
+      project="elpolloloco"
+      [align]="'right'"
+      [skills]="['JavaScript', 'HTML', 'CSS']"
+    ></app-project>
+    <app-project
+      project="dabubble"
+      [skills]="['Angular', 'TypeScript', 'HTML', 'CSS', 'Supabase']"
+    ></app-project>
+  </div>
+  <app-feedback author="max"></app-feedback>
+</section>

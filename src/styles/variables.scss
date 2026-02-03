@@ -1,0 +1,18 @@
+:root {
+    --header-height: 109px;
+    --footer-height: 291px;
+}
+
+$color_bg: #0F172A;
+$color_primary1: #AEFF00;
+$color_primary2: #7D26CD;
+$color_error: #E61C40;
+$color_disabled: #B6B6B6;
+
+$max_container_width: 1440px;
+
+@media (max-width: 900px) {
+    :root {
+        --footer-height: 380px;
+    }
+}
