@@ -7,7 +7,7 @@ $config = [
     'recipient' => 'info@sebastianfranke.com',
     'from_email' => 'portfolio@sebastianfranke.com',
     'allowed_origins' => [
-        'https://portfolio.cozmostar.de',
+        'https://cozmostar.de',
         'http://localhost:4200',
     ],
 ];
