@@ -1,73 +1,93 @@
 <?php
 
-/**
- * Configuration for the contact form.
- */
-$config = [
-    'recipient' => 'info@sebastianfranke.com',
-    'from_email' => 'portfolio@sebastianfranke.com',
-    'allowed_origins' => [
-        'https://cozmostar.de',
-        'http://localhost:4200',
-    ],
-];
+// CORS headers (for Angular / frontend apps)
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Content-Type: application/json; charset=utf-8");
 
-// Determine CORS origin
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
-$allowedOrigin = in_array($origin, $config['allowed_origins']) ? $origin : $config['allowed_origins'][0];
+// ------------------------------------------------------------
+// WICHTIG:
+// Deine eigene Adresse in Zeile 15 setzen!
+// ------------------------------------------------------------
 
-/**
- * Handle different request methods.
- */
+// >>> DEINE EMAIL HIER EINTRAGEN <<<
+$siteEmail = "portfolio@cozmostar.de";
+
 switch ($_SERVER['REQUEST_METHOD']) {
-    case "OPTIONS":
-        // Handle CORS preflight requests
-        header("Access-Control-Allow-Origin: " . $allowedOrigin);
-        header("Access-Control-Allow-Methods: POST, OPTIONS");
-        header("Access-Control-Allow-Headers: content-type");
+
+    case 'OPTIONS':
+        // Preflight request
+        http_response_code(200);
         exit;
 
-    case "POST":
-        header("Access-Control-Allow-Origin: " . $allowedOrigin);
-        
-        // Retrieve and parse the JSON payload
+    case 'POST':
+        // Read raw JSON payload
         $json = file_get_contents('php://input');
         $params = json_decode($json);
 
-        if (!$params || !isset($params->email, $params->name, $params->message)) {
-            header("HTTP/1.1 400 Bad Request");
-            echo json_encode(['error' => 'Invalid data provided.']);
+        // Saubere JSON-Fehlerprüfung
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid JSON']);
             exit;
         }
 
-        $senderEmail = $params->email;
-        $senderName = $params->name;
-        $senderMessage = $params->message;
+        $email = $params->email ?? '';
+        $name = $params->name ?? '';
+        $userMessage = $params->message ?? '';
 
-        $subject = "Contact From <$senderEmail>";
-        $emailContent = "From: " . htmlspecialchars($senderName) . "<br><br>" . nl2br(htmlspecialchars($senderMessage));
+        // Basic validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($name) || empty($userMessage)) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Invalid input data']);
+            exit;
+        }
 
-        $headers = [
-            'MIME-Version: 1.0',
-            'Content-type: text/html; charset=utf-8',
-            'From: ' . $config['from_email'],
-            'Reply-To: ' . $senderEmail
-        ];
+        // Sanitize content
+        $safeName = htmlspecialchars($name, ENT_QUOTES, 'UTF-8');
+        $safeEmail = htmlspecialchars($email, ENT_QUOTES, 'UTF-8');
+        $safeMessage = nl2br(htmlspecialchars($userMessage, ENT_QUOTES, 'UTF-8'));
 
-        // Send the email
-        $success = mail($config['recipient'], $subject, $emailContent, implode("\r\n", $headers));
+        // Empfängeradresse (nutzt die oben definierte Mail)
+        $recipient = $siteEmail; 
+        $subject = 'Website Contact Form';
+
+        $mailBody = "
+            <strong>Name:</strong> {$safeName}<br>
+            <strong>Email:</strong> {$safeEmail}<br><br>
+            <strong>Message:</strong><br>
+            {$safeMessage}
+        ";
+
+        // Mail headers
+        $headers = [];
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=utf-8';
+        $headers[] = 'From: Website Kontakt <' . $siteEmail . '>'; 
+        $headers[] = 'Reply-To: ' . $email;
+        $headers[] = 'Return-Path: ' . $siteEmail; 
+
+        // Send mail
+        $success = mail(
+            $recipient,
+            $subject,
+            $mailBody,
+            implode("\r\n", $headers),
+            '-f ' . $siteEmail 
+        );
 
         if ($success) {
             echo json_encode(['success' => true]);
         } else {
-            header("HTTP/1.1 500 Internal Server Error");
-            echo json_encode(['error' => 'Failed to send email.']);
+            http_response_code(500);
+            echo json_encode(['success' => false, 'error' => 'Mail delivery failed']);
         }
+
         break;
 
     default:
-        // Reject non-POST or non-OPTIONS requests
-        header("Allow: POST, OPTIONS", true, 405);
-        echo json_encode(['error' => 'Method not allowed.']);
+        http_response_code(405);
+        echo json_encode(['success' => false, 'error' => 'Method not allowed']);
         exit;
 }
