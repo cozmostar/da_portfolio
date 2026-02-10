@@ -14,10 +14,16 @@
           src="/icons/logo.svg"
           alt="{{ 'header.alt.logo' | translate }}"
       /></a>
-      <a [routerLink]="['/legalnotice']" class="desktop-only"
-        >{{ "footer.legalnotice" | translate }}
-        <div class="line"></div
-      ></a>
+      <div class="legal-links desktop-only">
+        <a [routerLink]="['/legalnotice']"
+          >{{ "footer.legalnotice" | translate }}
+          <div class="line"></div
+        ></a>
+        <a [routerLink]="['/privacy']"
+          >{{ "footer.privacy" | translate }}
+          <div class="line"></div
+        ></a>
+      </div>
     </div>
     <div>
       <span
@@ -45,8 +51,11 @@
           alt="{{ 'footer.alt.linkedin' | translate }}"
       /></a>
     </div>
-    <a class="mobile-only" [routerLink]="['/legalnotice']">{{
-      "footer.legalnotice" | translate
-    }}</a>
+    <div class="legal-links mobile-only">
+      <a [routerLink]="['/legalnotice']">{{
+        "footer.legalnotice" | translate
+      }}</a>
+      <a [routerLink]="['/privacy']">{{ "footer.privacy" | translate }}</a>
+    </div>
   </footer>
 </div>
