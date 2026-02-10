@@ -4,8 +4,8 @@
  * Configuration for the contact form.
  */
 $config = [
-    'recipient' => 'info@sebastianfranke.com',
-    'from_email' => 'portfolio@sebastianfranke.com',
+    'recipient' => 'portfolio@cozmostar.de',
+    'from_email' => 'portfolio@cozmostar.de',
     'allowed_origins' => [
         'https://cozmostar.de',
         'http://localhost:4200',
