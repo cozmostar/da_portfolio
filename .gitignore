@@ -1,1 +1,23 @@
+# Abhängigkeiten
 node_modules
+
+# Build Output
+dist
+
+# Angular Cache
+.angular
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS-Dateien
+.DS_Store
+Thumbs.db
+
+# Umgebungsvariablen
+.env
+.env.local
+.env.production

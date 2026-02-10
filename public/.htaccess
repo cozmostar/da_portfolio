@@ -1,11 +1,29 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  
-  # Wenn die angeforderte Ressource keine Datei und kein Verzeichnis ist, leite auf index.html um
+
+  # Wenn die angeforderte Ressource eine Datei oder ein Verzeichnis ist, direkt ausliefern
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
   RewriteRule ^ - [L]
 
   # Alles andere an index.html senden (SPA Routing)
   RewriteRule ^ index.html [L]
+</IfModule>
+
+# Caching für statische Dateien
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Komprimierung aktivieren
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
 </IfModule>
