@@ -1,0 +1,35 @@
+name: Build and Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main # Oder wie dein Haupt-Branch heißt (z.B. master)
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22" # Passend zu deinem lokalen Setup
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Project
+        run: npm run build
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/portfolio/browser/
+          server-dir: public_html/ # Pfad auf Hostinger (meist public_html)
+          delete-destination-after-deploy: false # Vorsicht: Auf true löscht es alle anderen Dateien auf dem FTP!

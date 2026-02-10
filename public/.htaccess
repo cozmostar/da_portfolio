@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Wenn die angeforderte Ressource keine Datei und kein Verzeichnis ist, leite auf index.html um
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+  RewriteRule ^ - [L]
+
+  # Alles andere an index.html senden (SPA Routing)
+  RewriteRule ^ index.html [L]
+</IfModule>
