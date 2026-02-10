@@ -17,7 +17,7 @@ export class Contact {
 
   http = inject(HttpClient);
 
-  mailTest = false;
+  mailTest = true;
 
   mailSended = false;
   mailSendFailed = false;
