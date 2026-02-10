@@ -3,7 +3,7 @@ name: Build and Deploy to Hostinger
 on:
   push:
     branches:
-      - main # Oder wie dein Haupt-Branch heißt (z.B. master)
+      - main
 
 jobs:
   build-and-deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "24" # Passend zu deinem lokalen Setup (Node 24 / npm 11)
+          node-version: "24"
 
       - name: Install Dependencies
         run: npm ci
@@ -24,12 +24,9 @@ jobs:
       - name: Build Project
         run: npm run build
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy to deploy Branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: dist/portfolio/browser/
-          server-dir: public_html/ # Pfad auf Hostinger (meist public_html)
-          delete-destination-after-deploy: false # Vorsicht: Auf true löscht es alle anderen Dateien auf dem FTP!
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/portfolio/browser
+          publish_branch: deploy
