@@ -6,8 +6,15 @@
 $config = [
     'recipient' => 'info@sebastianfranke.com',
     'from_email' => 'portfolio@sebastianfranke.com',
-    'allowed_origin' => '*', // Adjust this for production to the actual domain
+    'allowed_origins' => [
+        'https://cozmostar.de',
+        'http://localhost:4200',
+    ],
 ];
+
+// Determine CORS origin
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$allowedOrigin = in_array($origin, $config['allowed_origins']) ? $origin : $config['allowed_origins'][0];
 
 /**
  * Handle different request methods.
@@ -15,13 +22,13 @@ $config = [
 switch ($_SERVER['REQUEST_METHOD']) {
     case "OPTIONS":
         // Handle CORS preflight requests
-        header("Access-Control-Allow-Origin: " . $config['allowed_origin']);
+        header("Access-Control-Allow-Origin: " . $allowedOrigin);
         header("Access-Control-Allow-Methods: POST, OPTIONS");
         header("Access-Control-Allow-Headers: content-type");
         exit;
 
     case "POST":
-        header("Access-Control-Allow-Origin: " . $config['allowed_origin']);
+        header("Access-Control-Allow-Origin: " . $allowedOrigin);
         
         // Retrieve and parse the JSON payload
         $json = file_get_contents('php://input');
