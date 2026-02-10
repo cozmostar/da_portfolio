@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router, RouterOutlet } from '@angular/router';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { Header } from './shared/header/header';
@@ -8,7 +8,7 @@ import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TranslateModule, Header, Footer, CommonModule],
+  imports: [RouterOutlet, TranslateModule, Header, Footer],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

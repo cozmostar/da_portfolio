@@ -1,2 +1,6 @@
-<div class="line line-left" *ngIf="align === 'left' || align === 'both'"></div>
-<div class="line line-right" *ngIf="align === 'right' || align === 'both'"></div>
+@if (align === 'left' || align === 'both') {
+  <div class="line line-left"></div>
+}
+@if (align === 'right' || align === 'both') {
+  <div class="line line-right"></div>
+}

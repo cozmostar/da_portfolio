@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Input, ElementRef, AfterViewInit, Renderer2, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-section-divider',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './section-divider.html',
   styleUrl: './section-divider.scss'
 })
